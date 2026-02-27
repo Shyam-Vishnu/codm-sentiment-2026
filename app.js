@@ -3,7 +3,7 @@
 // ===============================
 // Replace this with your deployed worker base URL.
 // Example: "https://codm-sentiment.YOURNAME.workers.dev"
-const WORKER_BASE_URL = "https://codm-sentiment.shyamvishnu19.workers.dev/";
+const WORKER_BASE_URL = "https://codm-sentiment.shyamvishnu19.workers.dev";
 
 // If your GitHub Pages site is hosted at https://USERNAME.github.io/REPO/,
 // this script is already relative-safe.
