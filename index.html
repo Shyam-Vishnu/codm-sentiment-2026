@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CODM Live Reddit Sentiment</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="container">
+    <div class="title-row">
+      <h1>CODM Live Reddit Sentiment</h1>
+      <div class="pill" id="lastUpdated">Loading…</div>
+    </div>
+    <p class="subtitle">
+      Live-ish sentiment from <b>r/CODMobile</b> and <b>r/CallOfDutyMobile</b>.
+      Powered by a Cloudflare Worker (proxy + aggregator) and optional OpenAI sentiment scoring.
+    </p>
+    <div class="controls">
+      <button id="refreshBtn">Refresh</button>
+      <label class="toggle">
+        <input type="checkbox" id="includeTextToggle" checked />
+        <span>Include post text (selftext) in analysis</span>
+      </label>
+      <label class="toggle">
+        <input type="checkbox" id="useOpenAIToggle" checked />
+        <span>Use OpenAI (if configured)</span>
+      </label>
+      <select id="sortSelect">
+        <option value="new">Newest</option>
+        <option value="top">Top (24h-ish)</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="grid">
+      <div class="card">
+        <h2>Overall</h2>
+        <div class="big-score">
+          <div class="score" id="overallScore">—</div>
+          <div class="score-label" id="overallLabel">—</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Positive</div>
+          <div class="bar"><div class="bar-fill" id="posBar" style="width:0%"></div></div>
+          <div class="bar-val" id="posVal">—</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Neutral</div>
+          <div class="bar"><div class="bar-fill" id="neuBar" style="width:0%"></div></div>
+          <div class="bar-val" id="neuVal">—</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Negative</div>
+          <div class="bar"><div class="bar-fill" id="negBar" style="width:0%"></div></div>
+          <div class="bar-val" id="negVal">—</div>
+        </div>
+        <div class="meta" id="countsMeta">—</div>
+      </div>
+
+      <div class="card">
+        <h2>Word Cloud</h2>
+        <p class="meta">Top terms from recent posts (bigger = more frequent)</p>
+        <div id="wordCloud" class="word-cloud" aria-label="Word cloud"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Recent Posts</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Subreddit</th>
+              <th>Sentiment</th>
+              <th>Score</th>
+              <th>Title</th>
+              <th>When</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody id="postsTbody"></tbody>
+        </table>
+      </div>
+      <p class="meta small">
+        Tip: If Reddit blocks temporarily, wait ~60 seconds and refresh.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>How it works (1 minute)</h2>
+      <ol class="how">
+        <li>Your browser calls the <b>Cloudflare Worker</b> (not Reddit directly).</li>
+        <li>The Worker fetches and merges posts from both subreddits.</li>
+        <li>If you configured <b>OPENAI_API_KEY</b> in Cloudflare, the Worker asks OpenAI to score sentiment.</li>
+        <li>The site renders the results + a simple word cloud.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="container footer">
+    Built for GitHub Pages. Backend runs on Cloudflare Workers.
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
